@@ -5,27 +5,23 @@ open Mnd.Core.Util
 open System.Drawing
 
 module Render =
-    let render (f:int*int->RgbColor) (width:int, height:int) =
+    let render (f:int*int -> RgbColor) (width:int, height:int) =
         let bmp = new Bitmap(width, height)
-        let coords = seq {
-            for i in 0..height-1 do
-                for j in 0..width-1 do
-                    yield (j,i)
-        }
-
+        
         let coordFunc = indexToCoord width
 
         let indexShader = coordFunc >> f >> RgbColor.map floatColorToScreen
 
         let pixels =
             Array.Parallel.init (width * height) indexShader
-            |> Dithering.dither width
+            // |> Dithering.dither width
 
         let writeFunc idx color =
             let (x, y) = coordFunc idx
             bmp.SetPixel(x, y, (RgbColor.RawToGdiColor color))
 
         Array.iteri writeFunc pixels
+        // Array.Parallel.iteri writeFunc pixels
         bmp
         
     let subSample cells i =

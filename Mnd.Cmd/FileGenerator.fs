@@ -50,7 +50,7 @@ module FileGenerator =
         
     let generateSeq =
         let endScale = 0.00003
-        let count = 50;
+        let count = 5;
         let fileIndexes = getFileSeq count endScale
             
         let files = fileIndexes |> List.map (fun (n, scale) -> (string (sprintf "D:\\Temp\\mandelbrot\\file%06i.png" n), scale))

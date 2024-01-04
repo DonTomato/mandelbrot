@@ -15,8 +15,8 @@ let generateSingleFile =
 
     let frameHeight = 0.00003
     let cameraPosition = (-0.998, 0.3011038462)
-    //let frameHeight = 1.2
-    //let cameraPosition = (-0.75, 0.0)
+    // let frameHeight = 1.2
+    // let cameraPosition = (-0.75, 0.0)
     let rotationAngle = 0.0
     let cameraScale = frameHeight   // The same?
 
@@ -53,6 +53,7 @@ let generateSingleFile =
 
 [<EntryPoint>]
 let main args =
-    Mnd.Cmd.FileGenerator.generateSeq |> ignore
+    // Mnd.Cmd.FileGenerator.generateSeq |> ignore
+    generateSingleFile |> ignore
     printfn "Finish."
     0
