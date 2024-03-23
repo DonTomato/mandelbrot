@@ -1,0 +1,6 @@
+@Mnd.Service_HostAddress = http://localhost:5221
+
+GET {{Mnd.Service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
