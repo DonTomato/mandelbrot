@@ -24,15 +24,10 @@ public class SmoothPixelRender : IRenderer
         _gradient = new LinearGradient(colors.Select(Rgba32.ParseHex).ToArray());
     }
 
-    public Rgba32 GetPixel(int iteration, int maxIterations, (double, double) z)
+    public Rgba32 GetPixel(int iteration, int maxIterations, (double r, double i) z)
     {
-        // var sum = z.Item1 * z.Item1 + z.Item2 * z.Item2;
-        // var fraction = (iteration - Math.Log2(Math.Log2(sum))) / maxIterations;
-        // fraction = fraction < 0 ? 0 : fraction;
-        // return _gradient.GetColorAt(fraction);
-
-        var x = z.Item1;
-        var y = z.Item2;
+        var x = z.r;
+        var y = z.i;
         
         var fraction = (iteration - Math.Log(Math.Log(Math.Sqrt(x * x + y * y)))) / maxIterations;
         return _gradient.GetColorAt(fraction);
