@@ -13,7 +13,11 @@ public class LinearGradient
     
     public LinearGradient(Rgba32[] colors)
     {
-        var fractionSize = 1.0 / colors.Length;
+        if (colors.Length < 2)
+        {
+            throw new ArgumentException("The color array must contain at least two colors");
+        }
+        var fractionSize = 1.0 / (colors.Length - 1);
         _points = colors.Select((c, i) => new Point
         {
             Fraction = i * fractionSize,
@@ -33,19 +37,20 @@ public class LinearGradient
             return _points.First().Color;
         }
         
-        var points = _points.Where(e => e.Fraction >= fraction).Take(2).ToArray();
+        var p1 = _points.Last(e => e.Fraction <= fraction);
+        var p2 = _points.First(e => e.Fraction >= fraction);
 
-        if (points[0].Fraction <= fraction || points.Length == 1)
+        if (Equals(p1, p2))
         {
-            return points[0].Color;
+            return p1.Color;
         }
 
-        var f0 = points[0].Fraction;
-        var f1 = points[1].Fraction;
+        var f0 = p1.Fraction;
+        var f1 = p2.Fraction;
         var f = (fraction - f0) / (f1 - f0);
 
-        var c1 = points[0].Color;
-        var c2 = points[1].Color;
+        var c1 = p1.Color;
+        var c2 = p2.Color;
 
         var color = new Rgba32(
                 (byte)(c1.R + (c2.R - c1.R) * f),

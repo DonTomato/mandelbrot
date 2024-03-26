@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Net.Mime;
 using Mnd.Core.Contracts;
+using Mnd.Core.Render;
+using Mnd.Core.Render.Smooth;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -10,6 +12,8 @@ public class SimpleGen
 {
     public static void Generate(Frame frame, CalcContext context)
     {
+        IRenderer renderer = new SmoothPixelRender();
+        
         var realHeight = frame.Width * context.FrameHeight / context.FrameWidth;
 
         var x0 = frame.CenterX - frame.Width / 2;
@@ -41,7 +45,8 @@ public class SimpleGen
                 {
                     if (z.Re * z.Re + z.Im * z.Im > 4.0)
                     {
-                        color = Rgba32.ParseHex("EE4B2B");
+                        color = renderer.GetPixel(i, context.Iterations, z); 
+                        //Rgba32.ParseHex("EE4B2B");
                         break;
                     }
 
