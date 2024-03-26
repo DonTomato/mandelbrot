@@ -12,7 +12,7 @@ var frame = new Frame()
     Width = 0.3,
     CenterX = 0.4,
     CenterY = 0.27,
-    FileName = "0.png",
+    FileName = "1.png",
     FilePath = Path.Combine(AppContext.BaseDirectory, "../../../../../data/tmp")
 };
 
@@ -24,7 +24,8 @@ var ctx = new CalcContext
     RenderType = RenderType.Smooth
 };
 
-SimpleGen.Generate(frame, ctx);
+// SimpleGen.Generate(frame, ctx);
+MGen.Generate(frame, ctx);
 
 var time = DateTime.Now - start;
 

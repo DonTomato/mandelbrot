@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Concurrent;
+using System.Drawing;
 using System.Net.Mime;
 using Mnd.Core.Contracts;
 using Mnd.Core.Render;
@@ -8,7 +9,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Mnd.Core.Generators;
 
-public static class SimpleGen
+public static class MGen
 {
     public static void Generate(Frame frame, CalcContext context)
     {
@@ -21,10 +22,11 @@ public static class SimpleGen
         var xe = x0 + frame.Width;
         var ye = y0 + realHeight;
 
-        var data = new Rgba32[context.FrameWidth, context.FrameHeight];
+        var bug = new ConcurrentBag<(int, Rgba32[])>();
 
-        for (int x = 0; x < context.FrameWidth; x++)
+        Parallel.For(0, context.FrameWidth, x =>
         {
+            var data = new Rgba32[context.FrameHeight];
             for (int y = 0; y < context.FrameHeight; y++)
             {
                 var xr = (double) x;
@@ -35,7 +37,7 @@ public static class SimpleGen
                 var c = (
                     Re: x0 + (xr / context.FrameWidth) * (xe - x0),
                     Im: y0 + (yr / context.FrameHeight) * (ye - y0)
-                    );
+                );
 
                 var color = Rgba32.ParseHex("000");
 
@@ -50,20 +52,24 @@ public static class SimpleGen
                     z = (
                         Re: z.Re * z.Re - z.Im * z.Im + c.Re,
                         Im: 2.0 * z.Re * z.Im + c.Im
-                        );
+                    );
                 }
 
-                data[x, y] = color;
+                data[y] = color;
             }
-        }
+
+            bug.Add((x, data));
+        });
 
         using (Image<Rgba32> bitmap = new Image<Rgba32>(context.FrameWidth, context.FrameHeight))
         {
+            var data = bug.ToArray().OrderBy(e => e.Item1).ToArray();
+            
             for (int x = 0; x < context.FrameWidth; x++)
             {
                 for (int y = 0; y < context.FrameHeight; y++)
                 {
-                    bitmap[x, y] = data[x, y];
+                    bitmap[x, y] = data[x].Item2[y];
                 }
             }
 
