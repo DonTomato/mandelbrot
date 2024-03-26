@@ -12,15 +12,15 @@ var frame = new Frame()
     Width = 0.3,
     CenterX = 0.4,
     CenterY = 0.27,
-    FileName = "1.png",
+    FileName = "2.png",
     FilePath = Path.Combine(AppContext.BaseDirectory, "../../../../../data/tmp")
 };
 
 var ctx = new CalcContext
 {
     Iterations = 1500,
-    FrameWidth = 1600,
-    FrameHeight = 1200,
+    FrameWidth = 1600 * 2,
+    FrameHeight = 1200 * 2,
     RenderType = RenderType.Smooth
 };
 

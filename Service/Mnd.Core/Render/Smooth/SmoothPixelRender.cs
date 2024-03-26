@@ -10,14 +10,15 @@ public class SmoothPixelRender : IRenderer
     {
         var colors = new string[]
         {
-            "#000000",
-            "#FF0000",
-            "#FFA500",
-            "#FFFF00",
-            "#00FF00",
-            "#0000FF",
-            "#4B0082",
-            "#EE82EE",
+            "000000",
+            "FF0000",
+            "FFA500",
+            "FFFF00",
+            "00FF00",
+            "0000FF",
+            "4B0082",
+            "EE82EE",
+            "33FFFF"
         };
         
         _gradient = new LinearGradient(colors.Select(Rgba32.ParseHex).ToArray());
