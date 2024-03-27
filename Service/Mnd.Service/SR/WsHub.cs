@@ -1,18 +1,16 @@
 using System.Collections.Concurrent;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.SignalR;
+using Mnd.Core.Contracts;
+using Mnd.Service.BgWorker;
 
 namespace Mnd.Service.SR;
 
-public class WsHub : Hub
+public class WsHub(IBackgroundTaskQueue queue) : Hub
 {
     private ConcurrentDictionary<string, string> _connectedClients = new();
     private ConcurrentDictionary<string, string> _connectedUsers = new();
-    
-    // public override Task OnConnectedAsync()
-    // {
-    //     // _connectedClients.TryAdd(Context.ConnectionId, Context.UserIdentifier);
-    //     return base.OnConnectedAsync();
-    // }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
@@ -35,5 +33,21 @@ public class WsHub : Hub
     {
         _connectedClients.TryAdd(Context.ConnectionId, userId);
         _connectedUsers.TryAdd(userId, Context.ConnectionId);
+
+        Frame frame = new Frame
+        {
+            C0Re = 0,
+            C0Im = 0,
+            Width = 3.5,
+            CenterX = -0.7,
+            CenterY = 0,
+            FileName = "mandelbrot.png",
+            FilePath = "../../../../../data/static"
+        };
+
+        await queue.QueueBackgroundWorkItemAsync(frame.GetBackgrounWorkItem(async () =>
+        {
+            await Clients.Client(Context.ConnectionId).SendAsync("Initial", JsonSerializer.Serialize(frame));
+        }));
     }
 }

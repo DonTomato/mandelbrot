@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mnd.Service.BgWorker;
 using Mnd.Service.Models;
 
 namespace Mnd.Service.Controllers;
@@ -7,10 +8,21 @@ namespace Mnd.Service.Controllers;
 [ApiController]
 public class GeneratorController : ControllerBase
 {
+    private readonly CancellationToken _cancellationToken;
+    private readonly IBackgroundTaskQueue _taskQueue;
+    
+    public GeneratorController(
+        IBackgroundTaskQueue taskQueue,
+        IHostApplicationLifetime applicationLifetime)
+    {
+        _cancellationToken = applicationLifetime.ApplicationStopping;
+        _taskQueue = taskQueue;
+    }
+    
     [HttpGet("")]
     public string Init()
     {
-        return "ok";
+        return "Mandelbrot Set Generator Api";
     }
     
     [HttpPost("frame")]

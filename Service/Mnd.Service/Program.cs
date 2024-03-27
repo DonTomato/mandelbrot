@@ -1,17 +1,31 @@
+using Mnd.Service.BgWorker;
 using Mnd.Service.SR;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddConsole();
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHostedService<QueuedHostedService>();
+builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
+{
+    if (!int.TryParse(builder.Configuration.GetSection("Settings")["QueueCapacity"], out var queueCapacity))
+    {
+        queueCapacity = 100;
+    }
+
+    return new BackgroundTaskQueue(queueCapacity);
+});
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "All", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        var uiOrigin = builder.Configuration.GetSection("Settings")["UiOrigin"]!;
+        
+        policy.WithOrigins(uiOrigin)
             .AllowAnyHeader()
             .AllowAnyMethod();
         policy.AllowCredentials();
