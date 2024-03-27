@@ -2,6 +2,7 @@
 
 public struct Frame
 {
+    public string UserId;
     public double C0Re;
     public double C0Im;
     public double CenterX;

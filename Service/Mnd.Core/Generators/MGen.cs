@@ -1,6 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Drawing;
-using System.Net.Mime;
 using Mnd.Core.Contracts;
 using Mnd.Core.Render;
 using Mnd.Core.Render.Smooth;
@@ -14,7 +12,7 @@ public static class MGen
     public static void Generate(Frame frame, CalcContext context)
     {
         IRenderer renderer = new SmoothPixelRender();
-        
+
         var realHeight = frame.Width * context.FrameHeight / context.FrameWidth;
 
         var x0 = frame.CenterX - frame.Width / 2;
@@ -64,7 +62,7 @@ public static class MGen
         using (Image<Rgba32> bitmap = new Image<Rgba32>(context.FrameWidth, context.FrameHeight))
         {
             var data = bug.ToArray().OrderBy(e => e.Item1).ToArray();
-            
+
             for (int x = 0; x < context.FrameWidth; x++)
             {
                 for (int y = 0; y < context.FrameHeight; y++)

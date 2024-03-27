@@ -5,6 +5,10 @@ Console.WriteLine("Mandelbrot Set");
 
 var start = DateTime.Now;
 
+var path = Path.Combine(AppContext.BaseDirectory, "../../../../../data/tmp");
+
+Directory.CreateDirectory(path);
+
 var frame = new Frame()
 {
     C0Re = 0,
@@ -13,14 +17,16 @@ var frame = new Frame()
     CenterX = 0.4,
     CenterY = 0.27,
     FileName = "2.png",
-    FilePath = Path.Combine(AppContext.BaseDirectory, "../../../../../data/tmp")
+    FilePath = path
 };
+
+const int k = 2;
 
 var ctx = new CalcContext
 {
     Iterations = 1500,
-    FrameWidth = 1600 * 2,
-    FrameHeight = 1200 * 2,
+    FrameWidth = 1600 * k,
+    FrameHeight = 1200 * k,
     RenderType = RenderType.Smooth
 };
 

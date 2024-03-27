@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Net.Mime;
-using Mnd.Core.Contracts;
+﻿using Mnd.Core.Contracts;
 using Mnd.Core.Render;
 using Mnd.Core.Render.Smooth;
 using SixLabors.ImageSharp;
@@ -13,7 +11,7 @@ public static class SimpleGen
     public static void Generate(Frame frame, CalcContext context)
     {
         IRenderer renderer = new SmoothPixelRender();
-        
+
         var realHeight = frame.Width * context.FrameHeight / context.FrameWidth;
 
         var x0 = frame.CenterX - frame.Width / 2;
