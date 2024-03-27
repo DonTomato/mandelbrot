@@ -7,6 +7,12 @@ namespace Mnd.Service.Controllers;
 [ApiController]
 public class GeneratorController : ControllerBase
 {
+    [HttpGet("")]
+    public string Init()
+    {
+        return "ok";
+    }
+    
     [HttpPost("frame")]
     public ActionResult Generate([FromBody]FrameRequest request)
     {

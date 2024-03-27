@@ -1,0 +1,31 @@
+@import "colors";
+
+$mdb-font-family: "Mulish", sans-serif;
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 10px;
+}
+  
+body { 
+    font-family: $mdb-font-family;
+    color: $gray-100;
+    background-color: $gray-900;
+    box-sizing: border-box;
+    font-size: 1.6rem;
+}
+
+input, textarea, button {
+    font-family: inherit;
+}
+
+@import "typography";
+@import "layout";
+
+@import "link";
+@import "button";

@@ -1,0 +1,21 @@
+.mnd-button {
+    background-color: transparent; 
+    border: 1px solid $red-800; 
+    border-radius: 4px;
+    color: $gray-100; 
+    padding: 1rem 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.6rem;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transition effect */
+
+    &:hover {
+        background-color: $red-900;
+    }
+
+    &:active {
+        background-color: $red-800;
+    }
+}

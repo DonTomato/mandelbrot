@@ -16,7 +16,7 @@ var frame = new Frame()
     Width = 0.3,
     CenterX = 0.4,
     CenterY = 0.27,
-    FileName = "2.png",
+    FileName = $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.png",
     FilePath = path
 };
 
