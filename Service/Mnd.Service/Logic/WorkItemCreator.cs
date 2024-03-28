@@ -1,14 +1,16 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.SignalR;
 using Mnd.Core.Contracts;
 using Mnd.Service.Logic.Interfaces;
+using Mnd.Service.Models;
 using Mnd.Service.SR;
 
 namespace Mnd.Service.Logic;
 
 public static class WorkItemCreator
 {
-    public static Func<CancellationToken, IHubContext<WsHub>, ValueTask> CreateWorkItem(Frame frame, string userId, ISettingsService settings)
+    public static Func<CancellationToken, IHubContext<WsHub>, ValueTask> CreateWorkItem(Frame frame, string userId, 
+        ISettingsService settings, 
+        WsConnectionManager connectionManager)
     {
         var frameSizes = settings.GetFrameSize();
         
@@ -22,7 +24,19 @@ public static class WorkItemCreator
                 RenderType = RenderType.Smooth
             }, token);
 
-            await hubContext.Clients.All.SendAsync("SendFrame", userId, JsonSerializer.Serialize(frame), cancellationToken: token);
+            if (connectionManager.TryGetConnection(userId, out string connectionId))
+            {
+                var frameResponse = new FrameResponse
+                {
+                    X = frame.CenterX,
+                    Y = frame.CenterY,
+                    W = frame.Width,
+                    FileName = frame.FileName
+                };
+                
+                await hubContext.Clients.Client(connectionId)
+                    .SendAsync("FrameCreated", MndSerializer.Serialize(frameResponse), cancellationToken: token);
+            }
         }
 
         return WorkItem;

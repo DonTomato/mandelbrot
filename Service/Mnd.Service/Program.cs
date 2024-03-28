@@ -21,6 +21,7 @@ builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
     return new BackgroundTaskQueue(queueCapacity);
 });
 builder.Services.AddSingleton<ISettingsService>(_ => new SettingsService(builder.Configuration));
+builder.Services.AddSingleton<WsConnectionManager>();
 
 builder.Services.AddCors(options =>
 {

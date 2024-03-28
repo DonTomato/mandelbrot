@@ -10,7 +10,7 @@
     /** @type {number} */
     export let maxWidth;
 
-    export let imgFileName = 'mandelbrot.png';
+    export let imgFileName = '';
 
     /** @type {boolean} */
     export let loading = false;

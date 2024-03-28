@@ -8,54 +8,55 @@ using Mnd.Service.Logic.Interfaces;
 
 namespace Mnd.Service.SR;
 
-public class WsHub(IBackgroundTaskQueue queue, ILogger<WsHub> logger, ISettingsService settings) : Hub
+public class WsHub(IBackgroundTaskQueue queue, ILogger<WsHub> logger, ISettingsService settings, WsConnectionManager connectionManager) : Hub
 {
-    private ConcurrentDictionary<string, string> _connectedClients = new();
-    private ConcurrentDictionary<string, string> _connectedUsers = new();
+    public override Task OnConnectedAsync()
+    {
+        var userId = Context.GetHttpContext()?.Request.Query["userId"].ToString();
+        if (!string.IsNullOrEmpty(userId))
+        {
+            connectionManager.AddConnection(userId, Context.ConnectionId);
+        }
+        return base.OnConnectedAsync();
+    }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        string userId;
-        string connectionId = Context.ConnectionId;
-        if (_connectedClients.TryGetValue(connectionId, out userId))
-        {
-            _connectedClients.TryRemove(Context.ConnectionId, out _);
-            _connectedUsers.TryRemove(userId, out _);
-        }
+        connectionManager.RemoveConnection(Context.ConnectionId);
         return base.OnDisconnectedAsync(exception);
     }
 
     public async Task SendFrame(string userId, string message)
     {
-        if (_connectedUsers.TryGetValue(userId, out var connectionId))
+        if (connectionManager.TryGetConnection(userId, out var connectionId))
         {
             await Clients.Client(connectionId).SendAsync("NewFrame", message);
         }
     }
     
-    public async Task RegisterClient(string userId)
-    {
-        _connectedClients.TryAdd(Context.ConnectionId, userId);
-        _connectedUsers.TryAdd(userId, Context.ConnectionId);
-
-        Frame frame = new Frame
-        {
-            C0Re = 0,
-            C0Im = 0,
-            Width = 3.5,
-            CenterX = -0.7,
-            CenterY = 0,
-            FileName = "mandelbrot.png",
-            FilePath = settings.GetStaticPath()
-        };
-
-        if (!Directory.Exists(frame.FilePath))
-        {
-            Directory.CreateDirectory(frame.FilePath);
-        }
-
-        var workItem = WorkItemCreator.CreateWorkItem(frame, userId, settings);
-
-        await queue.QueueBackgroundWorkItemAsync(workItem);
-    }
+    // public async Task RegisterClient(string userId)
+    // {
+    //     _connectedClients.TryAdd(Context.ConnectionId, userId);
+    //     _connectedUsers.TryAdd(userId, Context.ConnectionId);
+    //
+    //     Frame frame = new Frame
+    //     {
+    //         C0Re = 0,
+    //         C0Im = 0,
+    //         Width = 3.5,
+    //         CenterX = -0.7,
+    //         CenterY = 0,
+    //         FileName = "mandelbrot.png",
+    //         FilePath = settings.GetStaticPath()
+    //     };
+    //
+    //     if (!Directory.Exists(frame.FilePath))
+    //     {
+    //         Directory.CreateDirectory(frame.FilePath);
+    //     }
+    //
+    //     var workItem = WorkItemCreator.CreateWorkItem(frame, userId, settings);
+    //
+    //     await queue.QueueBackgroundWorkItemAsync(workItem);
+    // }
 }
