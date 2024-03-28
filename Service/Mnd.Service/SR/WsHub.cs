@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.SignalR;
 using Mnd.Core.Contracts;
 using Mnd.Service.BgWorker;
+using Mnd.Service.Logic;
 using Mnd.Service.Logic.Interfaces;
 
 namespace Mnd.Service.SR;
@@ -53,9 +54,8 @@ public class WsHub(IBackgroundTaskQueue queue, ILogger<WsHub> logger, ISettingsS
             Directory.CreateDirectory(frame.FilePath);
         }
 
-        await queue.QueueBackgroundWorkItemAsync(frame.GetBackgrounWorkItem(async () =>
-        {
-            await Clients.Client(Context.ConnectionId).SendAsync("Initial", JsonSerializer.Serialize(frame));
-        }));
+        var workItem = WorkItemCreator.CreateWorkItem(frame, userId, settings);
+
+        await queue.QueueBackgroundWorkItemAsync(workItem);
     }
 }

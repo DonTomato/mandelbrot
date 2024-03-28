@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.SignalR;
+using Mnd.Service.SR;
+
 namespace Mnd.Service.BgWorker;
 
-public sealed class QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger) : BackgroundService
+public sealed class QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger, IHubContext<WsHub> hubContext) : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -14,9 +17,9 @@ public sealed class QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<
         {
             try
             {
-                Func<CancellationToken, ValueTask>? workItem = await taskQueue.DequeueAsync(stoppingToken);
+                Func<CancellationToken, IHubContext<WsHub>, ValueTask>? workItem = await taskQueue.DequeueAsync(stoppingToken);
 
-                await workItem(stoppingToken);
+                await workItem(stoppingToken, hubContext);
             }
             catch (OperationCanceledException)
             {

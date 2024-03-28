@@ -13,26 +13,22 @@ public class Frame
     public string FileName { get; set; }
     public string FilePath { get; set; }
 
-    public void GeneratePicture(CalcContext context)
+    // TODO - pass cancellation token into GeneratePicture
+    public void GeneratePicture(CalcContext context, CancellationToken token)
     {
         MGen.Generate(this, context);
     }
 
-    public Func<CancellationToken, ValueTask> GetBackgrounWorkItem(Func<Task> callback)
-    {
-        return ct => BuildWorkItemAsync(ct, callback);
-    }
-
-    async ValueTask BuildWorkItemAsync(CancellationToken token, Func<Task> callback)
-    {
-        // TODO: handle default context
-        GeneratePicture(new CalcContext
-        {
-            Iterations = 1500,
-            FrameWidth = 1600,
-            FrameHeight = 1200,
-            RenderType = RenderType.Smooth
-        });
-        await callback();
-    }
+    // async ValueTask BuildWorkItemAsync(CancellationToken token, Func<Task> callback)
+    // {
+    //     // TODO: handle default context
+    //     GeneratePicture(new CalcContext
+    //     {
+    //         Iterations = 1500,
+    //         FrameWidth = 1600,
+    //         FrameHeight = 1200,
+    //         RenderType = RenderType.Smooth
+    //     });
+    //     await callback();
+    // }
 }

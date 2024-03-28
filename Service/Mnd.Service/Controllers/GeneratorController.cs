@@ -1,10 +1,8 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mnd.Service.BgWorker;
+using Mnd.Service.Logic;
 using Mnd.Service.Logic.Interfaces;
 using Mnd.Service.Models;
-using Mnd.Service.SR;
 
 namespace Mnd.Service.Controllers;
 
@@ -12,8 +10,7 @@ namespace Mnd.Service.Controllers;
 [ApiController]
 public class GeneratorController(
     IBackgroundTaskQueue taskQueue,
-    ISettingsService settings,
-    IHubContext<WsHub> hubContext)
+    ISettingsService settings)
     : ControllerBase
 {
     [HttpGet("")]
@@ -39,11 +36,10 @@ public class GeneratorController(
         var frame = request.GetFrame();
         frame.FilePath = settings.GetStaticPath();
         frame.FileName = DateTime.Now + ".png";
-        
-        await taskQueue.QueueBackgroundWorkItemAsync(frame.GetBackgrounWorkItem(async () =>
-        {
-            await hubContext.Clients.All.SendAsync("SendFrame", request.UserId, JsonSerializer.Serialize(frame));
-        }));
+
+        var workItem = WorkItemCreator.CreateWorkItem(frame, request.UserId, settings);
+
+        await taskQueue.QueueBackgroundWorkItemAsync(workItem);
 
         return Ok();
     }
