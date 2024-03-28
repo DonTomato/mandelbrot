@@ -144,9 +144,6 @@
         width: 100%;
         position: relative;
         border: 1px solid $gray-700;
-        // background-image: url('http://localhost:3333/mandelbrot.png');
-        // background-repeat: no-repeat;
-        // background-size: contain;
 
         img {
             width: 100%;

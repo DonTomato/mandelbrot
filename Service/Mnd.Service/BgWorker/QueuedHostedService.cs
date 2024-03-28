@@ -1,6 +1,6 @@
 namespace Mnd.Service.BgWorker;
 
-public sealed class QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger logger) : BackgroundService
+public sealed class QueuedHostedService(IBackgroundTaskQueue taskQueue, ILogger<QueuedHostedService> logger) : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {

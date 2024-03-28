@@ -1,13 +1,13 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.SignalR;
 using Mnd.Core.Contracts;
 using Mnd.Service.BgWorker;
+using Mnd.Service.Logic.Interfaces;
 
 namespace Mnd.Service.SR;
 
-public class WsHub(IBackgroundTaskQueue queue) : Hub
+public class WsHub(IBackgroundTaskQueue queue, ILogger<WsHub> logger, ISettingsService settings) : Hub
 {
     private ConcurrentDictionary<string, string> _connectedClients = new();
     private ConcurrentDictionary<string, string> _connectedUsers = new();
@@ -24,9 +24,12 @@ public class WsHub(IBackgroundTaskQueue queue) : Hub
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessage(string userId, string message)
+    public async Task SendFrame(string userId, string message)
     {
-        // await Clients.All.SendAsync("ReceiveMessage", user, message);
+        if (_connectedUsers.TryGetValue(userId, out var connectionId))
+        {
+            await Clients.Client(connectionId).SendAsync("NewFrame", message);
+        }
     }
     
     public async Task RegisterClient(string userId)
@@ -42,8 +45,13 @@ public class WsHub(IBackgroundTaskQueue queue) : Hub
             CenterX = -0.7,
             CenterY = 0,
             FileName = "mandelbrot.png",
-            FilePath = "../../../../../data/static"
+            FilePath = settings.GetStaticPath()
         };
+
+        if (!Directory.Exists(frame.FilePath))
+        {
+            Directory.CreateDirectory(frame.FilePath);
+        }
 
         await queue.QueueBackgroundWorkItemAsync(frame.GetBackgrounWorkItem(async () =>
         {

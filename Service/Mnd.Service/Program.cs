@@ -1,4 +1,6 @@
 using Mnd.Service.BgWorker;
+using Mnd.Service.Logic;
+using Mnd.Service.Logic.Interfaces;
 using Mnd.Service.SR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,7 @@ builder.Services.AddSingleton<IBackgroundTaskQueue>(_ =>
 
     return new BackgroundTaskQueue(queueCapacity);
 });
+builder.Services.AddSingleton<ISettingsService>(_ => new SettingsService(builder.Configuration));
 
 builder.Services.AddCors(options =>
 {

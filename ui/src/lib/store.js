@@ -13,7 +13,7 @@ export const currentFrame = writable({
     w: 3.5,
     width: 1000,
     height: 750,
-    fileName: 'mandelbrot.png'
+    fileName: undefined
 });
 
 export const loading = writable(false);
