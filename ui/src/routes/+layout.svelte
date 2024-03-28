@@ -35,6 +35,8 @@
      * @param frame {any}
      */
     function handleFrame(frame) {
+        console.log('Created Frame', frame);
+
         $currentFrame.w = frame.w;
         $currentFrame.x = frame.x;
         $currentFrame.y = frame.y;

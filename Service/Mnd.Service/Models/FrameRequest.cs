@@ -18,14 +18,16 @@ public class FrameRequest
     public Frame GetFrame()
     {
         var ratio = (double) Height / Width;
-        var wn = X * FrameW / Width;
 
-        return new Frame
+        var frame = new Frame
         {
             UserId = UserId,
-            CenterX = X + (FrameX + 0.5 * (FrameW - Width)) * X / Width,
-            CenterY = Y - (FrameY + 0.5 * (FrameW - Height) * ratio) * Y / Height,
+            CenterX = X + (FrameX + 0.5 * (FrameW - Width)) * W / Width,
+            CenterY = Y - (FrameY + 0.5 * (FrameW - Width) * ratio) * W * ratio / Height,
             Width = W * FrameW / Width,
         };
+
+        
+        return frame;
     }
 }

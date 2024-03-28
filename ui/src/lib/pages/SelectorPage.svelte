@@ -73,9 +73,9 @@
             y: currentData.y,
             width: pictureSize.width,
             height: pictureSize.height,
-            frameX: Math.round(pictureSize.width / 4),
-            frameY: Math.round(pictureSize.height / 4),
-            frameW: pictureSize.width * 2
+            frameX: -Math.floor(pictureSize.width),
+            frameY: -Math.floor(pictureSize.height),
+            frameW: pictureSize.width * 3
         };
 
         const apiBasePath = import.meta.env.VITE_API_BASE_PATH;
