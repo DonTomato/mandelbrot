@@ -59,7 +59,7 @@ public class GeneratorController(
     {
         var frame = request.GetFrame();
         frame.FilePath = settings.GetStaticPath();
-        frame.FileName = DateTime.Now + ".png";
+        frame.FileName = DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".png";
 
         var workItem = WorkItemCreator.CreateWorkItem(frame, request.UserId, settings, connectionManager);
 

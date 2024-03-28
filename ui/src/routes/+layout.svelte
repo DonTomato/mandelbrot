@@ -5,8 +5,6 @@
     import { currentFrame, loading, userId } from "$lib/store";
     import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
-    const wsUrl = 'ws://localhost:3000/ws';
-
     /** @type {HubConnection} */
     let connection;
 
@@ -37,8 +35,6 @@
      * @param frame {any}
      */
     function handleFrame(frame) {
-        console.log('Frame Created', frame);
-
         $currentFrame.w = frame.w;
         $currentFrame.x = frame.x;
         $currentFrame.y = frame.y;

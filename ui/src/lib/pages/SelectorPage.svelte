@@ -40,25 +40,25 @@
     async function zoomIn() {
         const currentData = $currentFrame;
         const request = {
-            user_id: $userId,
+            userId: $userId,
             w: currentData.w,
             x: currentData.x,
             y: currentData.y,
             width: pictureSize.width,
             height: pictureSize.height,
-            frame_x: zoomFrame.x,
-            frame_y: zoomFrame.y,
-            frame_w: zoomFrame.width
+            frameX: zoomFrame.x,
+            frameY: zoomFrame.y,
+            frameW: zoomFrame.width
         };
 
         const apiBasePath = import.meta.env.VITE_API_BASE_PATH;
-	    const response = await fetch(`${apiBasePath}/generate`, { 
+	    await fetch(`${apiBasePath}/gen/frame`, { 
             method: 'POST', 
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(request)     
+            body: JSON.stringify(request)
         });
 
         $loading = true;
@@ -67,25 +67,25 @@
     async function zoomOut() {
         const currentData = $currentFrame;
         const request = {
-            user_id: $userId,
+            userId: $userId,
             w: currentData.w,
             x: currentData.x,
             y: currentData.y,
             width: pictureSize.width,
             height: pictureSize.height,
-            frame_x: -Math.floor(pictureSize.width / 4),
-            frame_y: -Math.floor(pictureSize.height / 4),
-            frame_w: pictureSize.width * 2
+            frameX: Math.round(pictureSize.width / 4),
+            frameY: Math.round(pictureSize.height / 4),
+            frameW: pictureSize.width * 2
         };
 
         const apiBasePath = import.meta.env.VITE_API_BASE_PATH;
-	    await fetch(`${apiBasePath}/generate`, { 
+	    await fetch(`${apiBasePath}/gen/frame`, { 
             method: 'POST', 
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(request)     
+            body: JSON.stringify(request)
         });
         $loading = true;
     }
