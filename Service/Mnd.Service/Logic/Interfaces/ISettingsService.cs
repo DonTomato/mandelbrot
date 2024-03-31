@@ -6,4 +6,5 @@ public interface ISettingsService
 {
     string GetStaticPath();
     public (int Width, int Height) GetFrameSize();
+    public int GetMaxIterations();
 }

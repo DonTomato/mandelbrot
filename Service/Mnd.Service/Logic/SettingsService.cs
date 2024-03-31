@@ -7,6 +7,7 @@ public class SettingsService : ISettingsService
     string StaticPath { get; }
     private int Width { get; }
     private int Height { get; }
+    private int MaxIterations { get; }
 
 
     public SettingsService(ConfigurationManager config)
@@ -24,8 +25,14 @@ public class SettingsService : ISettingsService
             Height = height;
         else
             throw new Exception("Invalid FrameSize.Height setting");
+        
+        if (int.TryParse(settings["MaxIterations"], out int maxIterations))
+            MaxIterations = maxIterations;
+        else
+            throw new Exception("Invalid MaxIterations setting");
     }
 
     public string GetStaticPath() => StaticPath;
     public (int Width, int Height) GetFrameSize() => (Width, Height);
+    public int GetMaxIterations() => MaxIterations;
 }

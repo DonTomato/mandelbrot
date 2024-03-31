@@ -11,7 +11,7 @@ public static class MGen
 {
     public static void Generate(Frame frame, CalcContext context)
     {
-        IRenderer renderer = new SmoothPixelRender();
+        IRenderer renderer = new Smooth2PixelRender();
 
         var realHeight = frame.Width * context.FrameHeight / context.FrameWidth;
 
@@ -41,7 +41,7 @@ public static class MGen
 
                 for (int i = 0; i < context.Iterations; i++)
                 {
-                    if (z.Re * z.Re + z.Im * z.Im > 4.0)
+                    if (z.Re * z.Re + z.Im * z.Im > 2000.0)
                     {
                         color = renderer.GetPixel(i, context.Iterations, z);
                         break;

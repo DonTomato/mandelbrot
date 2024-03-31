@@ -18,7 +18,7 @@ public static class WorkItemCreator
         {
             frame.GeneratePicture(new CalcContext
             {
-                Iterations = 1500, 
+                Iterations = settings.GetMaxIterations(), 
                 FrameWidth = frameSizes.Width, 
                 FrameHeight = frameSizes.Height, 
                 RenderType = RenderType.Smooth

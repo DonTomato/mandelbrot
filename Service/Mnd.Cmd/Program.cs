@@ -1,5 +1,6 @@
 ﻿using Mnd.Core.Contracts;
 using Mnd.Core.Generators;
+using Mnd.Core.Render.Smooth;
 
 Console.WriteLine("Mandelbrot Set");
 
@@ -31,7 +32,11 @@ var ctx = new CalcContext
 };
 
 // SimpleGen.Generate(frame, ctx);
-MGen.Generate(frame, ctx);
+// MGen.Generate(frame, ctx);
+
+double f = 1.1799748935731764;
+var renderer = new Smooth2PixelRender();
+var color = renderer.CycleColor(f);
 
 var time = DateTime.Now - start;
 

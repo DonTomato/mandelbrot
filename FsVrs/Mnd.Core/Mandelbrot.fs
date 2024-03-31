@@ -3,7 +3,7 @@
 module Mandelbrot =
     open System.Numerics
 
-    let juliaIterate c z = (z * z) + c
+    // let juliaIterate c z = (z * z) + c
 
     let rec juliaEscapeBoth2 (radius:float) (maxIterations:int) (c:Complex) (z:Complex) curIteration =
         if z.Magnitude > radius then Some (curIteration, z)
@@ -17,9 +17,9 @@ module Mandelbrot =
         let mu = (log ((log zn.Magnitude) / (log 2.0))) / (log 2.0)
         (float n) + 1.0 - mu
 
-    let mandelEscapeIterationsFraction radius maxIterations z =
-        let renormalize (n, nz) =
-            renormalizeCount (n + 2, nz |> juliaIterate z |> juliaIterate z)
-
-        mandelEscapeBoth radius maxIterations z |> Option.map renormalize
+    // let mandelEscapeIterationsFraction radius maxIterations z =
+    //     let renormalize (n, nz) =
+    //         renormalizeCount (n + 2, nz |> juliaIterate z |> juliaIterate z)
+    //
+    //     mandelEscapeBoth radius maxIterations z |> Option.map renormalize
 

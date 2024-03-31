@@ -45,6 +45,7 @@ module Shaders =
         RgbColor.fromHex("#050047")
     |]
 
+    // escapeRadius maxIterations (x, y) -> color
     let cycleMandelbrotSmooth =
         let colorFunc =
             Mandelbrot.renormalizeCount

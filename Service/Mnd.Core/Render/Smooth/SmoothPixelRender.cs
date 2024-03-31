@@ -8,7 +8,7 @@ public class SmoothPixelRender : IRenderer
 
     public SmoothPixelRender()
     {
-        var colors = new string[]
+        var colors = new []
         {
             "#000000",
             "#FF0000",

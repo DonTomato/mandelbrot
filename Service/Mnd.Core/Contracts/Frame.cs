@@ -1,4 +1,5 @@
-﻿using Mnd.Core.Generators;
+﻿using System.Numerics;
+using Mnd.Core.Generators;
 
 namespace Mnd.Core.Contracts;
 
