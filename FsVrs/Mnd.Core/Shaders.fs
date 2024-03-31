@@ -17,7 +17,8 @@ module Shaders =
         let col2 = colors.[(idx + 1) % len]
         let diff = col2 - col1
         let easeFunc = (fun a c -> easeInOutLinear a c frac)
-        RgbColor.map2 easeFunc col1 diff
+        let r = RgbColor.map2 easeFunc col1 diff
+        r
 
     let mandelbrotShade insideColor outsideColorFunc radius maxIterations (x, y) : RgbColor =
         let iters = Mandelbrot.mandelEscapeBoth radius maxIterations (Complex(x, y))

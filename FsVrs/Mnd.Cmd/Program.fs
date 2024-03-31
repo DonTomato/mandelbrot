@@ -14,12 +14,12 @@ let generateSingleFile =
     let height = 1200
     let screenSize = (width, height)
 
-    let frameHeight = 3.0
-    let cameraPosition = (-0.7, 0.0)
+    let frameHeight = 0.00003
+    let cameraPosition = (-0.998, 0.3011038462)
     //let frameHeight = 1.2
     //let cameraPosition = (-0.75, 0.0)
     let rotationAngle = 0.0
-    let cameraScale = 1.0   // The same?
+    let cameraScale = frameHeight   // The same?
 
     let maxIterations = 1500
     let subsampleCells = 1
@@ -45,8 +45,8 @@ let generateSingleFile =
     let stopWatch = System.Diagnostics.Stopwatch.StartNew()
     // let bmp = render finalShader screenSize
     
-    let color = finalShader (50, 595)
-    let c1 = Shaders.cycleColorArray Shaders.orangeArr 1.1799748935731764 
+    let color = finalShader (800, 600)
+    // let c1 = Shaders.cycleColorArray Shaders.orangeArr 1.1799748935731764 
     // let c = RgbColor.RawToGdiColor color
     
     stopWatch.Stop()

@@ -34,7 +34,7 @@ var ctx = new CalcContext
 // SimpleGen.Generate(frame, ctx);
 // MGen.Generate(frame, ctx);
 
-double f = 1.1799748935731764;
+double f = 26.985551306551997;
 var renderer = new Smooth2PixelRender();
 var color = renderer.CycleColor(f);
 
